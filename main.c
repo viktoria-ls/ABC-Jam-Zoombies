@@ -1,6 +1,8 @@
 #include <stdio.h>
 
+#include "main_resources.h"
+
 int main() {
-	printf("Hello Zoombies");
+	updateScreen();
 	return 0;
 }
