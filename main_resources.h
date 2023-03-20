@@ -76,11 +76,10 @@ void timingGame(String toPrint, int speed, int *life, int lengthBar) {
 	Line space = ""; // The spaces for the arrows
     Line stringSpace = ""; // The spaces for the character and bar
     String bar = ""; // Bar for the level
-
+    generateBar(&bar, lengthBar); // Generates the bar
 
 	while (index < strlen(toPrint) && *life > 0) {
         c = toPrint[index];
-        generateBar(&bar, lengthBar);
         randPos = rand() % 60;
         generateStringSpace(&stringSpace, randPos-1);
 
