@@ -1,27 +1,54 @@
-/*
-This file contains all constants, aliases, structs and function
-*/
+/* This file contains aliases and structs (and some functions for now) */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
 #include <string.h>
-#include<conio.h>
+#include <conio.h>
 
-#define SCREEN_SIZE (120)
-typedef char Line[SCREEN_SIZE + 1];
+#define WIDTH (100)
+#define HEIGHT (41)
+typedef char Line[WIDTH + 1];
 typedef char String[31];
 
-/*Clears the current screen and replaces it with*/
-void updateScreen() {
-	printf("ZOOMBIES\n");
-	char testChar = getch();
-	
-	//Sleep(3000);
-	system("cls");
-	printf("You entered: %c\n", testChar);
-}
+
+
+
+
+typedef char UpperBoxString[WIDTH * 30 + 30 + 1];		// (100 width * 30 lines) + 30 newlines + 1 null terminator
+typedef char LowerBoxString[WIDTH * 11 + 11 + 1];		// (100 width * 11 lines) + 11 newlines + 1 null terminator
+
+// Struct/s for UpperBox
+typedef struct {
+	int floorNum;
+	int doorOpeningLevel;	// 0 is fully closed, 4 is fully opened
+	int doorAction;		// 1 if needs to be open, 0 if needs to be closed
+	char *image;
+	UpperBoxString string;
+} UpperBox;
+
+// Struct/s for LowerBox
+typedef struct {
+	char *lines[5];
+} NarrationLowerBox;
+
+typedef struct {
+	int speed;			// 1 to 3 for different speeds
+} TimingGameLowerBox;
+
+typedef struct {
+	char *type;
+	int isWaitingForDoor;
+	LowerBoxString string;						// String representation of LowerBox
+	NarrationLowerBox narrationLowerBox;		// NarrationLowerBox data if type == NARRATION
+	TimingGameLowerBox timingGameLowerBox;		// TimingGameLowerBox data if type == TIMING_GAME
+} LowerBox;
+
+
+
+
+
 
 /* Add spaces for the arrow to move*/
 void addSpace(Line *space) {
@@ -31,8 +58,8 @@ void addSpace(Line *space) {
 
 /*Reset all the spaces */
 void resetSpace(Line *space) {
-	Line new = "";
-	memmove(*space, new, sizeof(new));
+	Line newLine = "";
+	memmove(*space, newLine, sizeof(newLine));
 }
 
 
@@ -78,7 +105,7 @@ void timingGame(String toPrint, int speed, int *life, int lengthBar) {
     String bar = ""; // Bar for the level
     generateBar(&bar, lengthBar); // Generates the bar
 
-	while (index < strlen(toPrint) && *life > 0) {
+	while (index < strlen(toPrint) && *(life) > 0) {
         c = toPrint[index];
         randPos = rand() % 60;
         generateStringSpace(&stringSpace, randPos-1);
@@ -127,7 +154,7 @@ void timingGame(String toPrint, int speed, int *life, int lengthBar) {
             Sleep(speed);
             system("cls");
 
-            if (x == SCREEN_SIZE-1) {
+            if (x == WIDTH-1) {
                 x = 0;
                 resetSpace(&space);
             }

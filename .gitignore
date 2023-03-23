@@ -1,3 +1,4 @@
 *.exe
 *.h.gch
+*.txt
 my_draft.c
