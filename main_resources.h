@@ -24,6 +24,7 @@ typedef struct {
 	int floorNum;
 	int doorOpeningLevel;	// 0 is fully closed, 4 is fully opened
 	int doorAction;		// 1 if needs to be open, 0 if needs to be closed
+	int floorDown;		// 1 if floorNum display needs to change (down)
 	char *image;
 	UpperBoxString string;
 } UpperBox;

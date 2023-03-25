@@ -1,17 +1,34 @@
 /*This file takes care of the view/UI of the game*/
-
+#include <stdlib.h>
 #include "assets.h"
 
 // Handlers for UpperBox
-void doorHandler(UpperBox *upper) {
+void floorNumHandler(UpperBox *upper) {
 	char *elevatorOpenings[] = {open0, open1, open2, open3, open4};
 	
+	strcpy(upper->string, floorHeader0);
+	
+	char floorNumBuffer[3];
+	itoa(upper->floorNum, floorNumBuffer, 10);
+	
+	if(upper->floorNum < 10)
+		strcat(upper->string, "0");
+	
+	strcat(upper->string, floorNumBuffer);
+	
+	strcat(upper->string, floorHeader1);
+	strcat(upper->string, elevatorOpenings[upper->doorOpeningLevel]);
+	
+	upper->floorDown = 0;
+}
+
+void doorHandler(UpperBox *upper) {
 	if (upper->doorAction == 1)		// if door is to be opened
 		upper->doorOpeningLevel += 1;
 	else							// if door is to be closed
 		upper->doorOpeningLevel -= 1;
-	
-	strcpy(upper->string, elevatorOpenings[upper->doorOpeningLevel]);
+		
+	floorNumHandler(upper);
 }
 
 // Handlers for LowerBox
@@ -85,6 +102,9 @@ void updateGameUI(UpperBox *upper, LowerBox *lower) {
 		if((upper->doorAction == 0 && upper->doorOpeningLevel == 0) || (upper->doorAction == 1 && upper->doorOpeningLevel == 4)) // if door finally fully opens/closes
 			lower->isWaitingForDoor = 0;
 	}
+	
+	if(upper->floorDown == 1)
+		floorNumHandler(upper);
 	
 	// Calls appropriate handler
 	if (strcmp(lower->type, "TIMING_GAME") == 0)

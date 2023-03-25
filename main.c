@@ -7,12 +7,18 @@
 #include "main_resources.h"
 #include "view.h"
 
+void floorDown(UpperBox *upper, int *currentFloor) {
+	upper->floorDown = 1;
+	upper->floorNum -= 1;
+	(*currentFloor) -= 1;
+}
+
 int main() {
 	int life = 3;
 	int currentFloor = 15;
 
-	// UpperBox(floorNum, doorOpeningLevel, doorAction, image, string)
-	UpperBox upper = {currentFloor, 4, 0, "", ""};
+	// UpperBox(floorNum, doorOpeningLevel, doorAction, floorDown, image, string)
+	UpperBox upper = {currentFloor, 4, 0, 0, "", ""};
 	
 	// LowerBox(type, isWaitingForDoor, string, narrationLowerBox, timingGameLowerBox);
 	LowerBox lower;
@@ -45,7 +51,8 @@ int main() {
 				upper.doorAction = 0;			// Door is to be closed because timing game is over
 				lower.isWaitingForDoor = 1;		// Has to wait for door to close again
 				lower.type = "NARRATION";
-				currentFloor--;
+				floorDown(&upper, &currentFloor);
+				
 			}
 			else if (strcmp(lower.type, "DOOR_CHOICE") == 0) {
 				char choice = 'x';
@@ -58,7 +65,7 @@ int main() {
 					}
 					else if (choice == '2') {
 						lower.type = "NARRATION";
-						currentFloor--;
+						floorDown(&upper, &currentFloor);
 					}
 				}
 			}
