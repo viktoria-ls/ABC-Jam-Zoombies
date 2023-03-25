@@ -14,6 +14,9 @@ void floorDown(UpperBox *upper, int *currentFloor) {
 }
 
 int main() {
+	// Runs main menu (you can comment this out to skip it)
+	mainMenuHandler();
+	
 	int life = 3;
 	int currentFloor = 15;
 
@@ -56,17 +59,16 @@ int main() {
 			}
 			else if (strcmp(lower.type, "DOOR_CHOICE") == 0) {
 				char choice = 'x';
-				while (choice != '1' && choice != '2') {
+				while (choice != '1' && choice != '2')
 					choice = getch();
-					if (choice == '1') {
-						lower.type = "TIMING_GAME";
-						lower.isWaitingForDoor = 1;
-						upper.doorAction = 1;
-					}
-					else if (choice == '2') {
-						lower.type = "NARRATION";
-						floorDown(&upper, &currentFloor);
-					}
+				if (choice == '1') {
+					lower.type = "TIMING_GAME";
+					lower.isWaitingForDoor = 1;
+					upper.doorAction = 1;
+				}
+				else if (choice == '2') {
+					lower.type = "NARRATION";
+					floorDown(&upper, &currentFloor);
 				}
 			}
 			else if (strcmp(lower.type, "NARRATION") == 0) {		// Assumes type == NARRATION always means transition between timing game and door choice

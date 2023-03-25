@@ -2,6 +2,28 @@
 #include <stdlib.h>
 #include "assets.h"
 
+// Handlers for Main Menu and Ending
+void mainMenuHandler() {
+	printf("%s", mainMenuScreen);
+	char choice = 'x';
+	
+	while(choice != '1' && choice != '2')
+		choice = getch();
+		
+	system("cls");
+	
+	if (choice == '2') {
+		printf("%s", instructionsScreen);
+		getch();
+		system("cls");
+		mainMenuHandler();	
+	}
+}
+
+void endingHandler() {
+	
+}
+
 // Handlers for UpperBox
 void floorNumHandler(UpperBox *upper) {
 	char *elevatorOpenings[] = {open0, open1, open2, open3, open4};
@@ -94,7 +116,7 @@ void narrationHandler(LowerBox *lower) {
 }
 
 // Calls handler, clears screen, prints updated UpperBox and LowerBox
-void updateGameUI(UpperBox *upper, LowerBox *lower) {
+void updateGameUI(UpperBox *upper, LowerBox *lower) {	
 	if (lower->isWaitingForDoor == 1) {		// if door needs to be opened or closed
 		doorHandler(upper);
 		Sleep(300);
@@ -113,9 +135,8 @@ void updateGameUI(UpperBox *upper, LowerBox *lower) {
 		doorChoiceHandler(lower);
 	else if (strcmp(lower->type, "NARRATION") == 0)
 		narrationHandler(lower);
-	
+		
 	system("cls");
-	
 	printf("%s", upper->string);
 	printf("%s", lower->string);
 }
