@@ -1,5 +1,6 @@
 /*This file takes care of the view/UI of the game*/
 #include <stdlib.h>
+#include <math.h>
 #include "assets.h"
 
 // Handlers for Main Menu and Ending
@@ -20,8 +21,81 @@ void mainMenuHandler() {
 	}
 }
 
-void endingHandler() {
+void scoreStatHandler(char *statName, int stat, int multiplier) {
+	char statStr[101] = "|               |                    ";
+	char statBuffer[4];
 	
+	strcat(statStr, statName);
+	strcat(statStr, " ");
+	
+	// Adds enough dashes
+	int i;
+	int statStrLen = strlen(statStr);
+	for(i = 0; i < 56 - statStrLen; i++)	// 56 is position before " <stat> <multiplier>"
+		strcat(statStr, "-");
+	
+	// Concatenates stat
+	strcat(statStr, " ");
+	itoa(stat, statBuffer, 10);
+	strcat(statStr, statBuffer);
+	
+	if(multiplier > 0) {		// no multiplier for speed bonus and total
+		// Concatenates multiplier
+		strcat(statStr, " X ");
+		itoa(multiplier, statBuffer, 10);
+		strcat(statStr, statBuffer);
+	}
+	
+	// Adds enough spaces
+	statStrLen = strlen(statStr);
+	for(i = 0; i < 83 - statStrLen; i++)
+		strcat(statStr, " ");
+		
+	strcat(statStr, "|               |\n");
+	
+	printf("%s", statStr);
+	printf("|               |                                                                  |               |\n");
+}
+
+void endHandler(int doorsOpened, int peopleSaved, int zombieHoards, int lives, int speedBonus, char* endComment) {
+	printf("%s", scoreScreenTop);
+	
+	// Displays stats
+	scoreStatHandler("DOORS OPENED", doorsOpened, 50);
+	scoreStatHandler("PEOPLE SAVED", peopleSaved, 100);
+	scoreStatHandler("ZOMBIE HOARDS", zombieHoards, 200);
+	scoreStatHandler("LIVES", lives, 300);
+	scoreStatHandler("SPEED BONUS", speedBonus, 0);
+	
+	// Displays total
+	printf("|               --------------------------------------------------------------------               |\n");
+	printf("|               --------------------------------------------------------------------               |\n");
+	printf("|               |                                                                  |               |\n");
+	
+	int total = doorsOpened*50 + peopleSaved*100 + zombieHoards*200 + lives*300 + speedBonus;
+	
+	scoreStatHandler("TOTAL", total, 0);
+	printf("|               --------------------------------------------------------------------               |\n");
+	printf("|                                                                                                  |\n");
+	printf("|                                                                                                  |\n");
+	printf("|                                                                                                  |\n");
+	
+	// Displays ending comment
+	char zoombiesComment[101] = "|               Performance Verdict: ";
+	strcat(zoombiesComment, endComment);
+	
+	int i;
+	int zoombiesCommentLen = strlen(zoombiesComment);
+	for(i = 0; i < 99 - zoombiesCommentLen; i++)	// 56 is position before " <stat> <multiplier>"
+		strcat(zoombiesComment, " ");
+	
+	strcat(zoombiesComment, "|\n");
+	printf("%s", zoombiesComment);
+	
+	printf("%s", scoreScreenBottom);
+	
+	getch();
+	system("cls");
 }
 
 // Handlers for UpperBox
@@ -102,7 +176,7 @@ void narrationHandler(LowerBox *lower) {
 		strcat(lower->string, narrationLine);
 		
 		int j;
-		for (j = 0; j < 88 - strlen(narrationLine); j++)
+		for (j = 0; j < 88 - strlen(narrationLine); j++)		// 88 is (total width - 2 borders - 10 padding)
 			strcat(lower->string, " ");
 		
 		strcat(lower->string, "     |\n");
