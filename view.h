@@ -138,7 +138,7 @@ void timingGameHandler(LowerBox *lower) {
 					"|     The next thing to change on the screen is the elevator door closing and a transition         |\n" 
 					"|     narration LowerBox to go to next door choice                                                 |\n"
 					"|                                                                                                  |\n"
-					"|                                                                Press a button to continue...     |\n"
+					"|                                                                 Press any key to continue...     |\n"
 					"----------------------------------------------------------------------------------------------------\n";
 	
 	strcpy(lower->string, box);
@@ -161,32 +161,76 @@ void doorChoiceHandler(LowerBox *lower) {
 	strcpy(lower->string, box);
 }
 
+
+
 void narrationHandler(LowerBox *lower) {
 	char *top = 	"----------------------------------------------------------------------------------------------------\n"
 					"|                                                                                                  |\n"
 					"|                                                                                                  |\n";
 					
 	strcpy(lower->string, top);
-
+	
 	int i;
-	for (i = 0; i < 5; i++) {
-		char *narrationLine = lower->narrationLowerBox.lines[i];		// Gets each line in narration
-		
-		strcat(lower->string, "|     ");
-		strcat(lower->string, narrationLine);
-		
-		int j;
-		for (j = 0; j < 88 - strlen(narrationLine); j++)		// 88 is (total width - 2 borders - 10 padding)
-			strcat(lower->string, " ");
-		
-		strcat(lower->string, "     |\n");
+	char *content = lower->narrationLowerBox.content;
+	int maxLineLen = WIDTH - 2 - 10;
+	char line[maxLineLen + 1];
+	
+	String word;
+	int linesMade = 0;
+	int charsRead = 0;
+	for (i = 0; i < strlen(content); i++) {
+		if(linesMade == 5) {
+			lower->narrationLowerBox.hasNextPage = 1;
+			break;
+		}
+		if(content[i] != ' ')
+			strcat(word, (char[2]){(char)content[i]});
+			
+		else {
+			if(strlen(word) + strlen(line) <= maxLineLen) {			// if adding word fits in line
+				strcat(line, word);
+				if(strlen(line) + 1 <= maxLineLen)
+					strcat(line, " ");
+				charsRead += strlen(word) + 1;
+				strcpy(word, "");
+			}
+			else {		// if adding word doesnt fit in line
+				int j;
+				int spacesToFill = maxLineLen - strlen(line);
+				for (j = 0; j < spacesToFill; j++)		// fill rest of needed space
+					strcat(line, " ");
+				
+				strcat(lower->string, "|     ");
+				strcat(lower->string, line);
+				strcat(lower->string, "     |\n");
+				
+				strcpy(line, "");
+				
+				linesMade++;
+				i--;
+			}
+		}
+	}
+	
+	int j;
+	for (j = linesMade; j < 5; j++) {
+		strcat(lower->string, "|                                                                                                  |\n");
+		lower->narrationLowerBox.hasNextPage = 0;	
 	}
 
 	char *bottom =  "|                                                                                                  |\n"
-					"|                                                                Press a button to continue...     |\n"
+					"|                                                                 Press any key to continue...     |\n"
 					"----------------------------------------------------------------------------------------------------\n";
-					
 	strcat(lower->string, bottom);
+	
+	
+					
+	if(lower->narrationLowerBox.hasNextPage == 1) {
+		int remainingContentLen = strlen(content) - charsRead;
+		char remainingContent[remainingContentLen + 1];
+		strncpy(remainingContent, content + charsRead, remainingContentLen);
+		lower->narrationLowerBox.content = remainingContent;
+	}
 }
 
 // Calls handler, clears screen, prints updated UpperBox and LowerBox

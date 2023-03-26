@@ -30,25 +30,15 @@ int main() {
 		// UpperBox(floorNum, doorOpeningLevel, doorAction, floorDown, image, string)
 		UpperBox upper = {currentFloor, 4, 0, 0, "", ""};
 		
-		// LowerBox(type, isWaitingForDoor, string, narrationLowerBox, timingGameLowerBox);
-		LowerBox lower;
-		lower.type = "NARRATION";
-		lower.isWaitingForDoor = 1;
-		strcpy(lower.string, "");
-		
 		NarrationLowerBox narration;
-		// each line should have max 88 characters; below is sample narration text
-		narration.lines[0] = "This is just some default narration text. This is supposed to say something like,";
-		narration.lines[1] = "\"The zombie falls as you put a bullet in its head (dam thats gory)...\" like that.";
-		narration.lines[2] = "This is still pretty manual, maybe we can make a better system for this so that the";
-		narration.lines[3] = "overflow from a text would go to the next page and you would get to go to the next page";
-		narration.lines[4] = "by pressing a button. Stuff like that. Might be optional if we're pressed for time.";
-		
+		narration.content = "As the elevator doors slid open, James hesitated for a moment. The lobby was eerily quiet, and something about the atmosphere gave him chills. He shook it off and stepped inside, pressing the button for the fifteenth floor. But as the elevator started to ascend, he heard a low growling noise. His heart racing, he looked up to see a group of zombies staggering towards him. Panic set in as James realized he was trapped in the elevator with no way out. He quickly assessed his options, searching for a weapon to defend himself. But all he had was his briefcase.";
+		narration.hasNextPage = 0;
+
 		TimingGameLowerBox timingGame;
 		timingGame.speed = 0;
 		
-		lower.narrationLowerBox = narration;
-		lower.timingGameLowerBox = timingGame;
+		// LowerBox(type, isWaitingForDoor, string, narrationLowerBox, timingGameLowerBox);
+		LowerBox lower = {"NARRATION", 1, "", narration, timingGame};
 		
 		// Game Loop
 		while(currentFloor >= 1 && life > 0) {
@@ -80,7 +70,8 @@ int main() {
 				}
 				else if (strcmp(lower.type, "NARRATION") == 0) {		// Assumes type == NARRATION always means transition between timing game and door choice
 					getch();
-					lower.type = "DOOR_CHOICE";
+					if(lower.narrationLowerBox.hasNextPage == 0)
+						lower.type = "DOOR_CHOICE";
 				}
 			}
 		}

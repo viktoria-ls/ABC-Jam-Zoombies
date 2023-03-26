@@ -31,7 +31,8 @@ typedef struct {
 
 // Struct/s for LowerBox
 typedef struct {
-	char *lines[5];
+	char *content;
+	int hasNextPage; 	// 1 if content overflows to next narration page
 } NarrationLowerBox;
 
 typedef struct {
