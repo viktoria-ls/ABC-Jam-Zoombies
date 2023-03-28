@@ -39,7 +39,7 @@ int main() {
 		char *endComment = "You're our hero! Play again?";
 	
 		// UpperBox(floorNum, doorOpeningLevel, doorAction, floorDown, image, string)
-		UpperBox upper = {currentFloor, 4, 0, 0, "", ""};
+		UpperBox upper = {currentFloor, 4, 0, 0, ""};
 		
 		// LowerBox(type, isWaitingForDoor, string, narrationLowerBox, timingGameLowerBox);
 		LowerBox lower;
@@ -49,11 +49,11 @@ int main() {
 		
 		NarrationLowerBox narration;
 		// each line should have max 88 characters; below is sample narration text
-		narration.lines[0] = "This is just some default narration text. This is supposed to say something like,";
-		narration.lines[1] = "\"The zombie falls as you put a bullet in its head (dam thats gory)...\" like that.";
-		narration.lines[2] = "This is still pretty manual, maybe we can make a better system for this so that the";
-		narration.lines[3] = "overflow from a text would go to the next page and you would get to go to the next page";
-		narration.lines[4] = "by pressing a button. Stuff like that. Might be optional if we're pressed for time.";
+		narration.lines[0] = "Time to face the dangers of the floor below you... What will await you as you";
+		narration.lines[1] = "descend?";
+		narration.lines[2] = "";
+		narration.lines[3] = "";
+		narration.lines[4] = "";
 		
 		TimingGameLowerBox timingGame;
 		timingGame.speed = 1;
