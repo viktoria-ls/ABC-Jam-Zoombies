@@ -58,7 +58,7 @@ void scoreStatHandler(char *statName, int stat, int multiplier) {
 	printf("|               |                                                                  |               |\n");
 }
 
-void endHandler(int doorsOpened, int peopleSaved, int zombieHoards, int lives, int speedBonus, char* endComment) {
+void endHandler(int doorsOpened, int peopleSaved, int zombieHoards, int lives, char* endComment) {
 	printf("%s", scoreScreenTop);
 	
 	// Displays stats
@@ -66,14 +66,13 @@ void endHandler(int doorsOpened, int peopleSaved, int zombieHoards, int lives, i
 	scoreStatHandler("PEOPLE SAVED", peopleSaved, 100);
 	scoreStatHandler("ZOMBIE HOARDS", zombieHoards, 200);
 	scoreStatHandler("LIVES", lives, 300);
-	scoreStatHandler("SPEED BONUS", speedBonus, 0);
 	
 	// Displays total
 	printf("|               --------------------------------------------------------------------               |\n");
 	printf("|               --------------------------------------------------------------------               |\n");
 	printf("|               |                                                                  |               |\n");
 	
-	int total = doorsOpened*50 + peopleSaved*100 + zombieHoards*200 + lives*300 + speedBonus;
+	int total = doorsOpened*50 + peopleSaved*100 + zombieHoards*200 + lives*300;
 	
 	scoreStatHandler("TOTAL", total, 0);
 	printf("|               --------------------------------------------------------------------               |\n");

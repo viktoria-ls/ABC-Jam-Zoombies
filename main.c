@@ -35,7 +35,6 @@ int main() {
 		int doorsOpened = 0;
 		int peopleSaved = 0;
 		int zombieHoards = 0;
-		int speedBonus = 20;
 		char *endComment = "You're our hero! Play again?";
 	
 		// UpperBox(floorNum, doorOpeningLevel, doorAction, floorDown, image, string)
@@ -149,7 +148,7 @@ int main() {
 		
 		system("cls");
 		PlaySound("Audio/ending.wav", NULL, SND_FILENAME | SND_ASYNC);
-		endHandler(doorsOpened, peopleSaved, zombieHoards, life, speedBonus, endComment);	
+		endHandler(doorsOpened, peopleSaved, zombieHoards, life, endComment);	
 	}
 	return 0;
 }
